@@ -76,7 +76,7 @@ public class RequestController {
   // MultipratFile을 List로 만들어서 받으면 다중 첨부 파일이 된다.@GetMapping("path")
   public String getMethodName(@RequestParam String param) {
     return new String();
-  }
+  }    
 
   @PostMapping("/v5")
   public void fileAttach(
