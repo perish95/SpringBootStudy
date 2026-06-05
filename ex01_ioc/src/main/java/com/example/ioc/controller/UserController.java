@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.ioc.dto.UserDTO;
 import com.example.ioc.service.EmailNotificationService;
@@ -59,13 +60,13 @@ public class UserController {
   // }
 
   // 회원 가입 시 알림 서비스 사용
-  @RequestMapping("/join")
+  @RequestMapping(value = "/join", method = RequestMethod.GET) // Default는 GET방식이다. 그래서 생략이 가능하다.
   public void createUser() {
     notificationService.sendNotification("반갑습니다!");
   }
 
   // 회원 정보 수정 시 알림
-  @RequestMapping("/modify")
+  @RequestMapping(value = "/modify", method = RequestMethod.POST)
   public void modifyUser() {
     notificationService.sendNotification("수정되었습니다!");
   }
