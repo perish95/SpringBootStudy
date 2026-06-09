@@ -76,7 +76,7 @@ public class MemberService {
         .build();
 
     return updatedMember;
-  }
+  } 
 
   // Delete
   public void deleteMember(Long id) {

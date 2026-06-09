@@ -1,6 +1,10 @@
 package com.example.valid.exception;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,7 +14,15 @@ public class GlobalExceptionHandler {
   // @Valid 검증 실패 시
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-    ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
+    BindingResult bindingResult = e.getBindingResult();
+    List<ErrorResponse.FieldErrorDetail> fieldErrorDetail = bindingResult.getFieldErrors().stream()
+        .map(error -> new ErrorResponse.FieldErrorDetail(
+            error.getField(),
+            error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
+            error.getDefaultMessage()))
+        .collect(Collectors.toList());
+    ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, fieldErrorDetail);
+
     return new ResponseEntity<>(errorResponse, ErrorCode.INVALID_INPUT_VALUE.getStatus());
   }
 
