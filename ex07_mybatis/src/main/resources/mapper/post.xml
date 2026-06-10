@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatis.mapper.PostMapper">
+  <resultMap id="postWithUser" type="Post">
+    <id property="id" column="post_id" />
+    <result property="userId" column="user_id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="post_created_at"/>
+    <association property="user" javaType="User">
+      <id property="id" column="user_id"/>
+      <result property="email" column="email"/>
+      <result property="nickname" column="nickname"/>
+      <result property="createdAt" column="user_created_at"/>
+    </association>
+  </resultMap>
+
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*) FROM posts  
+  </select>
+
+  <!--단건 조회-->
+  <select id="findById" resultMap="postWithUser">
+    SELECT 
+      p.id AS post_id, p.user_id, p.title, p.content, p.created_at AS post_created_at,  
+      u.email, u.nickname, u.created_at AS user_created_at
+    FROM users u INNER JOIN posts p 
+    ON u.id = p.user_id
+    WHERE p.id = #{id}
+  </select>
+
+  <!--전체 조회-->
+  <select id="findAll" resultMap="postWithUser">
+    SELECT 
+      p.id AS post_id, p.user_id, p.title, p.content, p.created_at AS post_created_at,  
+      u.email, u.nickname, u.created_at AS user_created_at
+    FROM users u INNER JOIN posts p 
+    ON u.id = p.user_id
+    ORDER BY post_created_at DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <!--정보 삽입-->
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO posts (user_id, title, content)
+    VALUES (#{user_id}, #{title}, #{content})
+  </insert>
+
+  <!--정보 수정-->
+  <update id="update">
+    UPDATE posts
+    SET title = #{title},
+        content = #{content}
+    WHERE id = #{id}
+  </update>
+
+  <!--정보 삭제-->
+  <delete id="delete">
+    DELETE FROM posts
+    WHERE id = #{id}
+  </delete>
+</mapper>

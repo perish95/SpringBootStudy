@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 자바와 xml연결 -->
+<mapper namespace="com.example.mybatis.mapper.UserMapper">
+  <!-- 모든 select태그는 결과 타입(resultType, resultMap) 명시가 필요합니다. -->
+  <!-- insert, update, delete 태그는 결과 타입을 명시하면 오류난다. -->
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*) FROM users
+  </select>
+</mapper>
+

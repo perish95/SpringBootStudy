@@ -1,0 +1,28 @@
+#property
+#spring.application.name=ex07_mybatis
+
+#yml
+#탭 쓰지 말고 스페이스 2번
+#콜론 다음에 공백한게 반드시 필요
+spring:
+  application:
+    name: ex07_mybatis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mybatis_db?serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+  sql:
+    init:
+      mode: always # 앱 구동 시 초기 스크립트(schema.sql, data.sql) 자동 실행
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #user_id(sql) -> userId(java)로 맵핑해줌
+  type-aliases-package: com.example.mybatis.domain #import
+  # mapper-locations:
+  #   - mapper/user.xml
+  #   - mapper/post.xml
+  # 보통 아래 걸로 함
+  # classpath가 없으면 간혹 못 찾아가는 경우가 있어서 붙여줘라
+  mapper-locations: classpath:mapper/*.xml
