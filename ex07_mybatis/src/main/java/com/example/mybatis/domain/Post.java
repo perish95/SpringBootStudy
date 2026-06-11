@@ -15,10 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Post {
   private Long id;
-  private Long uesr_id;
+  private Long userId;
   private String title;
   private String content;
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   private User user;
 }

@@ -1,22 +1,34 @@
 package com.example.mybatis.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.mybatis.domain.Post;
+import com.example.mybatis.dto.PageResponse;
 import com.example.mybatis.dto.PostCreateRequest;
 import com.example.mybatis.dto.PostResponse;
+import com.example.mybatis.dto.PostUpdateRequest;
+import com.example.mybatis.exception.CustomException;
+import com.example.mybatis.exception.ErrorCode;
 import com.example.mybatis.mapper.PostMapper;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional(readOnly = true, rollbackFor = Exception.class) // select이외의 메소드 걸어주기
 @Service
 @RequiredArgsConstructor
 public class PostService {
   private final PostMapper postMapper;
 
+  @Transactional
   public PostResponse createPost(PostCreateRequest request) {
     Post post = Post.builder()
-        .uesr_id(request.user_id())
+        .userId(request.userId())
         .title(request.title())
         .content(request.content())
         .build();
@@ -32,7 +44,45 @@ public class PostService {
   }
 
   public PostResponse findById(Long id) {
+    Post post = postMapper
+        .findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-    return null;
+    return PostResponse.from(post); // Post로부터 PostResponse 얻기(실무 코드, 정적 메서드 패턴:from)
+  }
+
+  public PageResponse<PostResponse> getPosts(int page, int size, String sort) {
+    long offset = (page - 1) * size;
+    long totalElements = postMapper.countAll();
+    int totalPages = (int) Math.ceil((double) totalElements / size);
+
+    List<Post> posts = postMapper.findAll(offset, size, sort);
+    List<PostResponse> contents = posts.stream()
+        .map(PostResponse::from) // .map(post -> PostResponse.from(post))
+        .collect(Collectors.toList());
+
+    return new PageResponse<>(contents, page, size, totalPages, totalElements, sort);
+  }
+
+  @Transactional
+  public PostResponse updatePost(Long id, @RequestBody PostUpdateRequest request) {
+    Post post = postMapper
+        .findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+    Post updatedPost = Post.builder()
+        .id(request.id())
+        .userId(id)
+        .title(request.title())
+        .content(request.content())
+        .build();
+
+    postMapper.update(updatedPost);
+
+    return PostResponse.from(updatedPost);
+  }
+
+  @Transactional
+  public void deletePost(Long id) {
+    postMapper.deleteById(id);
   }
 }

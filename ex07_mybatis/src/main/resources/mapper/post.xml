@@ -37,14 +37,14 @@
       u.email, u.nickname, u.created_at AS user_created_at
     FROM users u INNER JOIN posts p 
     ON u.id = p.user_id
-    ORDER BY post_created_at DESC
+    ORDER BY post_id ${sort}
     LIMIT #{offset}, #{size}
   </select>
 
   <!--정보 삽입-->
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO posts (user_id, title, content)
-    VALUES (#{user_id}, #{title}, #{content})
+    VALUES (#{userId}, #{title}, #{content})
   </insert>
 
   <!--정보 수정-->
@@ -56,7 +56,7 @@
   </update>
 
   <!--정보 삭제-->
-  <delete id="delete">
+  <delete id="deleteById">
     DELETE FROM posts
     WHERE id = #{id}
   </delete>
