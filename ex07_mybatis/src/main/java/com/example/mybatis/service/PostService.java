@@ -68,17 +68,20 @@ public class PostService {
   public PostResponse updatePost(Long id, @RequestBody PostUpdateRequest request) {
     Post post = postMapper
         .findById(id)
-        .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-    Post updatedPost = Post.builder()
-        .id(request.id())
-        .userId(id)
-        .title(request.title())
-        .content(request.content())
-        .build();
+        .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND)); // 좀 비효율 사실상 null체크용도
+    // Post updatedPost = Post.builder()
+    // .id(request.id())
+    // .userId(id)
+    // .title(request.title())
+    // .content(request.content())
+    // .build();
 
-    postMapper.update(updatedPost);
+    post.setTitle(request.title());
+    post.setContent(request.content());
 
-    return PostResponse.from(updatedPost);
+    postMapper.update(post);
+
+    return PostResponse.from(post);
   }
 
   @Transactional
