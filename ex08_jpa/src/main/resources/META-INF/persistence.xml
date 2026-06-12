@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" 
+             xmlns="https://jakarta.ee/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd ">
+  
+  <persistence-unit name="jpa-learning">
+  
+    <class>com.example.jpa.ex01_entity.Product</class>
+    <class>com.example.jpa.ex01_entity.User</class>
+    <class>com.example.jpa.ex02_persistence_context.Book</class>
+    <class>com.example.jpa.ex03_embeddable.Company</class>
+
+    <properties>
+    
+      <!-- 데이터베이스 접속 정보 -->
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpa_db?serverTimezone=Asia/Seoul"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.password" value="1234"/>
+      
+      <!-- hibernate.dialect : Hibernate가 사용할 데이터베이스 방언 설정, MySQL 데이터베이스에 최적화된 SQL을 생성하도록 지시 -->
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      
+      <!-- hibernate.hbm2ddl.auto : 스키마 자동 생성/수정 전략 -->
+      <!--   - none        : 아무것도 하지 않음 (운영 환경 권장) -->
+      <!--   - update      : 엔티티 변경사항을 기존 테이블에 반영 (칼럼 추가/수정) -->
+      <!--   - create      : 애플리케이션 시작 시 테이블 삭제 후 재생성 -->
+      <!--   - create-drop : 애플리케이션 종료 시 테이블 삭제 -->
+      <!--   - validate    : 엔티티와 테이블 스키마가 일치하는지만 검증 -->
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      
+      <!-- hibernate.show_sql : 실행되는 SQL 쿼리를 콘솔에 출력, 디버깅을 위해 사용 -->
+      <property name="hibernate.show_sql" value="true"/>
+      
+      <!-- hibernate.format_sql: 출력되는 SQL을 가독성 좋게 포맷팅 -->
+      <property name="hibernate.format_sql" value="true"/>
+      
+    </properties>
+  
+  </persistence-unit>
+  
+</persistence>
