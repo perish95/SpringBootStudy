@@ -43,7 +43,7 @@ public class PostController {
 
   // JPA 페이징 요청 예시
   // http://localhost:8080/api/posts?page=0&size=2&sort=id,desc
-  // 주의) 1페이지는 page=0 입니다.
+  // 주의) 1페이지는 page=0 입니다. (spring data jpa에서는)
   @GetMapping
   public ResponseEntity<Page<PostDto.Response>> getPosts(
       @RequestParam(name = "keyword", required = false) String keyword,

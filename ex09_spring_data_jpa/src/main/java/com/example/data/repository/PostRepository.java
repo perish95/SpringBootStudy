@@ -17,7 +17,6 @@ import com.example.data.domain.Post;
 // 4. 수정: JpaRepository가 지원하지 않음 (변경 감지를 이용함)
 
 public interface PostRepository extends JpaRepository<Post, Long> { // <엔티티타입, ID타입>
-s
   // 게시글 단건 조회(게시글과 댓글을 조인하여 한 번에 조회하도록 JPQL 작성)
   @Query("select p from Post p left join fetch p.comments where p.id = :id")
   Post findPostWithComments(@Param("id") Long id);
