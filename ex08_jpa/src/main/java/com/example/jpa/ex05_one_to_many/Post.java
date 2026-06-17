@@ -3,7 +3,6 @@ package com.example.jpa.ex05_one_to_many;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Post {
   private String title;
 
   @OneToMany
-  //Cascade = CascadeType.PERSIST: Post 영속화 시 연관 관계를 가진 PostComment를 함께 영속화
+  // Cascade = CascadeType.PERSIST: Post 영속화 시 연관 관계를 가진 PostComment를 함께 영속화
   @JoinColumn(name = "post_id") // Post가 아닌 PostComment 테이블(자식 테이블)에 생성할 FK칼럼명 작성
   private List<PostComment> comments = new ArrayList<>();
 
